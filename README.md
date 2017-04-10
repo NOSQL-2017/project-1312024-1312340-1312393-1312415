@@ -3,8 +3,9 @@
 **Name of your app** là repository cho đồ án nhóm. Nhóm tối đa 4 thành viên.
 
 Thành viên:
-* [ ] **MSSV1** Tên sinh viên 1 (tên tài khoản github)
-* [ ] **MSSV2** Tên sinh viên 2 (tên tài khoản github)
+* [x] **1312340** Lê Quốc Tấn Lộc (1312340)
+* [x] **1312393** Phùng Hải Nguyên (1312393)
+* [x] **1312415** Trần Thanh Phán (1312415)
 
 URL: **URL hosting của bài tập**
 
@@ -25,8 +26,12 @@ Sau khi thực hiện xong giai đoạn 1, sinh viên sẽ được cung cấp m
 
 ## Chức năng
 Các **yêu cầu chức năng** (check và ghi MSSV vào các phần chức năng đã thực hiện)
-* [ ] Yêu cầu 1. (MSSV1)
-
+* [ ] Xây dựng 1 trang web cho phép người dùng chia sẻ hình ảnh với nhau (MSSV1)
+* [ ] Người dùng có thể tạo tài khoản để đăng nhập
+* [ ] Người dùng đăng nhập có thể đăng ảnh, chia sẻ, đánh giá, bình luận hoặc mua ảnh
+* [ ] Người dùng có thể đăng nhập bằng các tài khoản xã hội như : Facebook, Twitter, G+,...
+* [ ] Người dùng có thể chia sẻ, bình luận bằng tài khoản Facebook, Twitter, G+ ...
+* [ ] Hỗ trợ tìm kiếm hình ảnh theo tên, tag ...
 
 ## Demo
 
