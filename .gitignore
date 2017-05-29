@@ -1,0 +1,4 @@
+/app/node_modules
+/.idea
+/loginapi/node_modules
+/mongodb-data/

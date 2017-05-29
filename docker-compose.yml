@@ -1,0 +1,48 @@
+version: '2'
+services:
+  app:
+      container_name: app
+      build: ./app/
+      links:
+        - db
+        - db2
+        - db3
+        - loginapi
+      environment:
+        - LOGIN_API_URL=http://loginapi:3000
+        - DATABASE2_HOST=db3
+        - DATABASE3_HOST=db4
+      ports:
+        - "3000:3000"
+      volumes:
+        - ./app:/webapp
+      command: bash -c "npm install && npm start"
+  loginapi:
+      container_name: loginapi
+      build: ./loginapi/
+      links:
+        - db
+      environment:
+        - DATABASE1_URL=mongodb://db:27017/photoApp
+      volumes:
+        - ./loginapi:/webapp
+      command: bash -c "npm install && nodemon server.js"
+  db:
+    container_name: db
+    ports:
+      - "27017:27017"
+    image: mongo
+    volumes:
+      - ./mongodb-data:/data/db
+  db2:
+    container_name: db2
+    ports:
+      - "6379:6379"
+    image: redis
+  db3:
+    container_name: db3
+    ports:
+        - "7474:7474"
+    image: neo4j
+    environment:
+      - NEO4J_AUTH=none

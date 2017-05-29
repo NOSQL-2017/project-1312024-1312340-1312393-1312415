@@ -1,0 +1,53 @@
+
+
+<form class="form-horizontal col-xs-6 col-md-offset-3" method="post"  enctype="multipart/form-data">
+    <h2 class="col-md-offset-1">REGISTER AN ACCOUNT</h2>
+    <div class="form-group">
+        <label for="inputName" class="control-label col-xs-2">Name</label>
+        <div class="col-xs-8">
+            <input name="name" type="text" class="form-control" id="inputName" placeholder="Your full name">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputEmail" class="control-label col-xs-2">Email</label>
+        <div class="col-xs-8">
+            <input name="email" type="email" class="form-control" id="inputEmail" placeholder="Email">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputPassword" class="control-label col-xs-2">Password</label>
+        <div class="col-xs-8">
+            <input name="password" type="password" class="form-control" id="inputPassword" placeholder="Password">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputAvatar" class="control-label col-xs-2">Avatar</label>
+        <div class="col-xs-8">
+            <input name="avatar" type="file" class="form-control" id="inputAvatar">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-offset-4 col-xs-10">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a class="btn btn-success" href="/">Back</a>
+        </div>
+    </div>
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
+<script>
+    function register() {
+        console.log("hello");
+        var formData = new FormData();
+        formData.append("name", $('#inputName').val());
+        formData.append("email", $('#inputEmail').val());
+        formData.append("password", $('#inputPassword').val());
+        formData.append("avatar", $('#inputAvatar')[0].files[0]);
+        console.log("{{url}}/user");
+        axios.post("{{url}}/user", formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        return false;
+    }
+</script>
