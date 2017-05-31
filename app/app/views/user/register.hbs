@@ -1,6 +1,8 @@
 
+<div id="error-messages">
 
-<form class="form-horizontal col-xs-6 col-md-offset-3" method="post"  enctype="multipart/form-data">
+</div>
+<form class="form-horizontal col-xs-6 col-md-offset-3" method="post" onsubmit="return register()" enctype="multipart/form-data">
     <h2 class="col-md-offset-1">REGISTER AN ACCOUNT</h2>
     <div class="form-group">
         <label for="inputName" class="control-label col-xs-2">Name</label>
@@ -36,18 +38,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
 <script>
     function register() {
-        console.log("hello");
+        $("#error-messages").empty();
         var formData = new FormData();
         formData.append("name", $('#inputName').val());
         formData.append("email", $('#inputEmail').val());
         formData.append("password", $('#inputPassword').val());
         formData.append("avatar", $('#inputAvatar')[0].files[0]);
-        console.log("{{url}}/user");
         axios.post("{{url}}/user", formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
-        })
+        }).then(function (res) {
+
+           if(res.data.success){
+               axios.post('',{
+                   user: res.data.user
+               }).then(function () {
+                   window.location = "/";
+               });
+           }
+            res.data.messages.map(function (message, index) {
+               $("#error-messages").append(`<div id='${index}' class="error-message">${message}</div>`)
+           })
+
+        });
         return false;
     }
 </script>

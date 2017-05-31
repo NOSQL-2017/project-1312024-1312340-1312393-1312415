@@ -4,7 +4,8 @@
   "description": "**Name of your app** là một bài tập 1 tại môn UDPT.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/1312415/lab01-1312415-1312420#readme",
   "dependencies": {
+    "axios": "^0.16.1",
     "body-parser": "^1.17.1",
     "cloudinary": "^1.8.0",
     "connect-multiparty": "^2.0.0",

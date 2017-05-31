@@ -9,7 +9,8 @@ services:
         - db3
         - loginapi
       environment:
-        - LOGIN_API_URL=http://loginapi:3000
+        - FRONT_END_LOGIN_API_URL=http://localhost:3001
+        - BACK_END_LOGIN_API_URL=http://loginapi:3000
         - DATABASE2_HOST=db3
         - DATABASE3_HOST=db4
       ports:
@@ -20,13 +21,15 @@ services:
   loginapi:
       container_name: loginapi
       build: ./loginapi/
+      ports:
+        - "3001:3000"
       links:
         - db
       environment:
         - DATABASE1_URL=mongodb://db:27017/photoApp
       volumes:
         - ./loginapi:/webapp
-      command: bash -c "npm install && nodemon server.js"
+      command: bash -c "npm install && npm start"
   db:
     container_name: db
     ports:

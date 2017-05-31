@@ -11,7 +11,11 @@ const UserSchema = mongoose.Schema({
         minlength: [3, "email is shorter than 3"],
         unique: [true, "this email is already in use"],
         validate: {
-            validator: validator.isEmail,
+            validator: (value)=>{
+
+                return validator.isEmail(value);
+
+            },
             message: '{VALUE} is not email'
         }
     },

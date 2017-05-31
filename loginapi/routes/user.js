@@ -3,6 +3,8 @@ var _ = require('lodash');
 var cloudinary = require('cloudinary');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
+var fs = require('fs');
+var axios = require('axios');
 
 cloudinary.config({
     cloud_name: 'du27rtoxp',
@@ -15,17 +17,15 @@ var User = require('../models/User');
 var router = express.Router();
 var userBodyHandle = function (req, res, result) {
     var user = new User({
-        name: body.name,
-        email: body.email,
-        password: body.password,
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
         avatar: result.url
     });
-
     user.save().then(function (user) {
-        req.session.user_id = user.id;
-        req.session.save();
         res.send({
-            success: true
+            success: true,
+            user: user
         })
 
 
@@ -49,22 +49,35 @@ var userBodyHandle = function (req, res, result) {
         })
     });
 }
-router.post('/', function (req, res) {
-    console.log(req.body);
-    // cloudinary.uploader.upload(req.files.avatar.path, function(result) {
-    //     if(!result){
-    //         res.send({
-    //             success: false,
-    //             messages: "need an avatar"
-    //         });
-    //     }else{
-    //         userBodyHandle(req, res, result);
-    //     }
-    // })
+router.post('/', multipartMiddleware, function (req, res) {
+    if (!req.files.avatar) {
+        res.send({
+            success: false,
+            messages: ["need an avatar"]
+        });
+    }
+    cloudinary.uploader.upload(req.files.avatar.path, function (result) {
+        fs.unlinkSync(req.files.avatar.path);
+        if (!result) {
+            res.send({
+                success: false,
+                messages: ["need an avatar"]
+            });
+        } else {
+            userBodyHandle(req, res, result);
+        }
+    })
 
 });
-router.get('/', multipartMiddleware, function (req, res) {
-    res.send("hello");
+router.get('/', function (req, res) {
+    User
+        .findById(req.query.id)
+        .then(function (user) {
+            res.send(user);
+        }, function (err) {
+            res.send(null);
+        })
+
 });
 
 module.exports = router;

@@ -16,37 +16,24 @@ var userController = {
     loadRegister: function (req, res) {
         res.render('user/register', {
             page: "register",
-            url: process.env.LOGIN_API_URL
+            url: process.env.FRONT_END_LOGIN_API_URL
         })
+    },
+    register:function (req, res) {
+        req.login(req.body.user, function (err) {
+            if (err) {
+                console.log(err);
+            }
+            return res.redirect('/');
+        });
     },
     logout: function (req, res) {
         req.logout();
-        res.redirect('/message');
+        res.redirect('/');
     },
-    register: function (req, res) {
-        cloudinary.uploader.upload(req.files.avatar.path, function (result) {
-            fs.unlinkSync(req.files.avatar.path);
-            if (!result) {
-                res.send({
-                    success: false,
-                    messages: "need an avatar"
-                });
-            } else {
-                console.log(result);
-                const formData = {
-                    email: req.body.email,
-                    name: req.body.name,
-                    avatar: result.url,
-                    password: req.body.password
-                };
-                axios.post(process.env.LOGIN_API_URL + "/user", formData).then(function () {
-                    console.log("ok")
-                },function (err) {
-                    console.log(err);
-                })
-            }
-        })
+    login: function (req, res) {
 
+        res.redirect('/');
     }
 };
 

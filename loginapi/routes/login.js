@@ -3,27 +3,11 @@ var router = express.Router();
 var _ = require('lodash');
 var User = require('../models/User');
 
-router.get('/', function (req, res) {
-    var text = [];
-    text.push(req.query.text);
-    res.render('login', {
-        page: 'login',
-        notices: text
-    })
-});
 router.post('/', function (req, res) {
-    var body = _.pick(req.body, ['email', 'password', 'name']);
+    var body = _.pick(req.body.data, ['email', 'password']);
     if (body) {
         User.findOne(body).then(function (user) {
-            if (user) {
-                req.session.user_id = user.id;
-                res.redirect('/');
-            } else {
-                res.render('login', {
-                    page: 'login',
-                    notices: ["wrong email or password "]
-                })
-            }
+            res.send(user);
         }).catch(function (e) {
             res.send(e);
         })
