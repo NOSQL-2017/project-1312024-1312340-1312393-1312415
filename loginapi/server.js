@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 
 var user = require('./routes/user');
 var login = require('./routes/login');
+var friend = require('./routes/friend');
 
 var app = express();
 var allowCrossDomain = function(req, res, next) {
@@ -19,11 +20,7 @@ app.use(allowCrossDomain);
 
 app.use('/user', user);
 app.use('/login',login);
-
-
-
-
-
+app.use('/friend', friend);
 
 
 app.set('port', (process.env.PORT || 3000));

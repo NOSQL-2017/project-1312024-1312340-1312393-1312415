@@ -34,6 +34,9 @@ var userController = {
     login: function (req, res) {
 
         res.redirect('/');
+    },
+    loginFacebook: function (req, res) {
+        res.redirect('/');
     }
 };
 

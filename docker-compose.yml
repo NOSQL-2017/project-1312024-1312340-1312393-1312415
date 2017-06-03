@@ -11,8 +11,11 @@ services:
       environment:
         - FRONT_END_LOGIN_API_URL=http://localhost:3001
         - BACK_END_LOGIN_API_URL=http://loginapi:3000
-        - DATABASE2_HOST=db3
-        - DATABASE3_HOST=db4
+        - DATABASE2_HOST=db2
+        - DATABASE3_HOST=db3
+        - FACEBOOK_CLIENT_ID=349836925395288
+        - FACEBOOK_CLIENT_SECRET=b5ee947725a403390fc99413c1d3ca39
+        - FACEBOOKCALLBACK=http://localhost:3000/user/login/facebook/callback
       ports:
         - "3000:3000"
       volumes:
@@ -42,6 +45,8 @@ services:
     ports:
       - "6379:6379"
     image: redis
+    volumes:
+      - ./redis-data:/data/
   db3:
     container_name: db3
     ports:

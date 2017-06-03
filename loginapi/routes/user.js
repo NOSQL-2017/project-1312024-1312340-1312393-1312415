@@ -30,6 +30,7 @@ var userBodyHandle = function (req, res, result) {
 
 
     }).catch(function (e) {
+
         var messages = [];
         if (e.errors.avatar) {
             messages.push(e.errors.avatar.message);
@@ -58,6 +59,7 @@ router.post('/', multipartMiddleware, function (req, res) {
     }
     cloudinary.uploader.upload(req.files.avatar.path, function (result) {
         fs.unlinkSync(req.files.avatar.path);
+
         if (!result) {
             res.send({
                 success: false,
@@ -78,6 +80,32 @@ router.get('/', function (req, res) {
             res.send(null);
         })
 
+});
+router.post('/find', function (req, res) {
+    console.log(req.body);
+    User.findOne(req.body)
+        .then(function (user) {
+            res.send({
+                user
+            });
+        }).catch(function (err) {
+        res.send({
+            user: null
+        });
+    })
+});
+router.post('/build', function (req, res) {
+    var user = new User(req.body);
+    user.password = user.facebookId;
+    user.save().then(function (user) {
+
+        res.send({user});
+    }).catch(function (err) {
+
+        res.send({
+            user: null
+        });
+    })
 });
 
 module.exports = router;
