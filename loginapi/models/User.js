@@ -26,14 +26,21 @@ const UserSchema = mongoose.Schema({
     ,
     name:{
         type: String,
-        required: [true, 'require name'],
-        minlength: [3, "password is shorter than 3"]
+        required: [true, 'require name']
     },
     password: {
         type: String,
         required: [true, 'require password'],
         minlength: [6, "password is shorter than 6"]
-    }
+    },
+    facebookId: {
+        type: String
+    },
+    friends: [
+        {
+            type: mongoose.Schema.Types.ObjectId, ref: 'users'
+        }
+    ]
 
 });
 UserSchema.plugin(uniqueValidator, {message: '{VALUE} is in use'});

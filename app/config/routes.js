@@ -16,9 +16,16 @@ module.exports = function (app) {
         }), controllers.user.login)
         .post('/logout', controllers.user.logout)
         .post('/register', controllers.user.register)
+        .get('/login/facebook/callback', passport.authenticate('facebook', {
+            failureRedirect: '/user/login',
+            scope: ['email']
+        }), controllers.user.loginFacebook)
+        .get('/login/facebook', passport.authenticate('facebook'))
         .get('/register', controllers.user.loadRegister);
     app.use('/user', userRouter);
     var aboutRouter = Router().get('/', controllers.about.index);
     app.use('/about', Authentication, aboutRouter);
+    var friendRouter = Router().get('/', controllers.friend.index);
+    app.use('/friend', Authentication, friendRouter);
 
 };
