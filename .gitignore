@@ -1,4 +1,7 @@
 /app/node_modules
 /.idea
 /loginapi/node_modules
+/relationapi/node_modules
 /mongodb-data/
+/neo4j-data
+/redis-data

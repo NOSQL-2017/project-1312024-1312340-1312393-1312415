@@ -35,12 +35,7 @@ const UserSchema = mongoose.Schema({
     },
     facebookId: {
         type: String
-    },
-    friends: [
-        {
-            type: mongoose.Schema.Types.ObjectId, ref: 'users'
-        }
-    ]
+    }
 
 });
 UserSchema.plugin(uniqueValidator, {message: '{VALUE} is in use'});

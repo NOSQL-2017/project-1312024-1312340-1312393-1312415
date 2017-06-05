@@ -23,6 +23,12 @@ var userBodyHandle = function (req, res, result) {
         avatar: result.url
     });
     user.save().then(function (user) {
+        console.log(process.env.BACK_END_RELATION_URL + '/friend');
+        axios.post(process.env.BACK_END_RELATION_URL + '/friend', user).then(function (response) {
+            if(!response.data.success){
+                console.log(err);
+            }
+        });
         res.send({
             success: true,
             user: user
@@ -98,7 +104,11 @@ router.post('/build', function (req, res) {
     var user = new User(req.body);
     user.password = user.facebookId;
     user.save().then(function (user) {
-
+        axios.post(process.env.BACK_END_RELATION_URL + '/friend', user).then(function (response) {
+            if(!response.data.success){
+                console.log(err);
+            }
+        });
         res.send({user});
     }).catch(function (err) {
 

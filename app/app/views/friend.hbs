@@ -9,7 +9,7 @@
     function AddFriend(friendId) {
 
         axios
-                .post('{{url}}/friend/add',{
+                .post('{{url2}}/friend/add',{
                     id: '{{session._id}}',
                     friendId: friendId
                 })
@@ -21,7 +21,7 @@
     }
     function RemoveFriend(friendId) {
         axios
-                .post('{{url}}/friend/remove',{
+                .post('{{url2}}/friend/remove',{
                     id: '{{session._id}}',
                     friendId: friendId
                 })

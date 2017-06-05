@@ -8,9 +8,11 @@ services:
         - db2
         - db3
         - loginapi
+        - relationapi
       environment:
         - FRONT_END_LOGIN_API_URL=http://localhost:3001
         - BACK_END_LOGIN_API_URL=http://loginapi:3000
+        - FRONT_END_RELATION_URL=http://localhost:3002
         - DATABASE2_HOST=db2
         - DATABASE3_HOST=db3
         - FACEBOOK_CLIENT_ID=349836925395288
@@ -28,10 +30,24 @@ services:
         - "3001:3000"
       links:
         - db
+        - relationapi
       environment:
         - DATABASE1_URL=mongodb://db:27017/photoApp
+        - BACK_END_RELATION_URL=http://relationapi:3000
       volumes:
         - ./loginapi:/webapp
+      command: bash -c "npm install && npm start"
+  relationapi:
+      container_name: relationapi
+      build: ./relationapi/
+      ports:
+        - "3002:3000"
+      links:
+        - db3
+      environment:
+        - DATABASE3_URL=http://db3:7474/
+      volumes:
+        - ./relationapi:/webapp
       command: bash -c "npm install && npm start"
   db:
     container_name: db
@@ -50,7 +66,10 @@ services:
   db3:
     container_name: db3
     ports:
-        - "7474:7474"
+      - "7474:7474"
+      - "7687:7687"
     image: neo4j
+    volumes:
+      - ./neo4j-data:/data/
     environment:
       - NEO4J_AUTH=none
