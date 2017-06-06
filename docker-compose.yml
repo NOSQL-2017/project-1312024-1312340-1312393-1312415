@@ -13,6 +13,7 @@ services:
         - FRONT_END_LOGIN_API_URL=http://localhost:3001
         - BACK_END_LOGIN_API_URL=http://loginapi:3000
         - FRONT_END_RELATION_URL=http://localhost:3002
+        - FRONT_END_FILE_API_URL=http://localhost:3003
         - DATABASE2_HOST=db2
         - DATABASE3_HOST=db3
         - FACEBOOK_CLIENT_ID=349836925395288
@@ -49,6 +50,18 @@ services:
       volumes:
         - ./relationapi:/webapp
       command: bash -c "npm install && npm start"
+  fileapi:
+      container_name: fileapi
+      build: ./fileapi/
+      ports:
+        - "3003:3000"
+      links:
+        - db
+      environment:
+        - DATABASE1_URL=mongodb://db:27017/photoApp
+      volumes:
+        - ./fileapi:/webapp
+      command: bash -c "npm install && npm start"
   db:
     container_name: db
     ports:
@@ -73,3 +86,10 @@ services:
       - ./neo4j-data:/data/
     environment:
       - NEO4J_AUTH=none
+  # db4:
+  #   container_name: db4
+  #   ports:
+  #     - "7000:7000"
+  #   image: cassandra
+  #   volumes:
+  #     - ./cassandra-data:/var/lib/cassandra

@@ -1,0 +1,83 @@
+<div id="#error-messages">
+
+</div>
+<div>
+    <form class="form-horizontal col-xs-6 col-md-offset-3" method="post" onsubmit="return upload()" enctype="multipart/form-data">
+        <h2 class="col-md-offset-1">Add a picture</h2>
+        <div class="form-group">
+            <label for="inputName" class="control-label col-xs-2">Title</label>
+            <div class="col-xs-8">
+                <input name="title" type="text" class="form-control" id="inputTitle" placeholder="title">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputPicture" class="control-label col-xs-2">picture</label>
+            <div class="col-xs-8">
+                <input name="url" type="file" class="form-control" id="inputPicture">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputDescription" class="control-label col-xs-2">Description</label>
+            <div class="col-xs-8">
+                <input name="description" type="text" class="form-control" id="inputDescription" placeholder="description">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-offset-4 col-xs-10">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+<h2>All image</h2>
+<div id="img-list">
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
+<script>
+    function LoadPost() {
+        axios
+            .get('{{url}}/post?id={{session._id}}')
+            .then(function (res) {
+                console.log(res);
+            })
+    }
+    window.onload = function () {
+        LoadPost()
+    }
+    function upload() {
+        $("#error-messages").empty();
+        var formData = new FormData();
+        formData.append("url", $('#inputPicture')[0].files[0]);
+        axios.post("{{url2}}/", formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(function (res) {
+            var formData = new FormData();
+            formData.append("title", $('#inputTitle').val());
+            formData.append("description", $('#inputDescription').val());
+            formData.append("url", "{{url2}}" + res.data.url);
+            formData.append("id", "{{session._id}}");
+            axios.post("{{url}}/post", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then(function (res) {
+                    console.log(res.data);
+                    if (res.data.success) {
+                        LoadPost();
+                        return;
+                    }
+                    res.data.messages.map(function (message, index) {
+                        $("#error-messages").append(`<div id='${index}' class="error-message">${message}</div>`)
+                    })
+
+                });
+        })
+
+        return false;
+    }
+
+</script>

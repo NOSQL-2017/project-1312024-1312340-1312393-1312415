@@ -5,3 +5,6 @@
 /mongodb-data/
 /neo4j-data
 /redis-data
+/fileapi/node_modules
+/cassandra-data
+/fileapi/public/picture
