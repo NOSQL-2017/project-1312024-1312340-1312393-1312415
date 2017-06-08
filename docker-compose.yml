@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
   app:
       container_name: app
@@ -14,6 +14,7 @@ services:
         - BACK_END_LOGIN_API_URL=http://loginapi:3000
         - FRONT_END_RELATION_URL=http://localhost:3002
         - FRONT_END_FILE_API_URL=http://localhost:3003
+        - FRONT_END_SYSTEM_API_URL=http://localhost:3004
         - DATABASE2_HOST=db2
         - DATABASE3_HOST=db3
         - FACEBOOK_CLIENT_ID=349836925395288
@@ -38,6 +39,8 @@ services:
       volumes:
         - ./loginapi:/webapp
       command: bash -c "npm install && npm start"
+      depends_on:
+        - db
   relationapi:
       container_name: relationapi
       build: ./relationapi/
@@ -61,6 +64,20 @@ services:
         - DATABASE1_URL=mongodb://db:27017/photoApp
       volumes:
         - ./fileapi:/webapp
+      command: bash -c "npm install && npm start"
+  systemapi:
+      container_name: systemapi
+      build: ./systemapi/
+      ports:
+        - "3004:3000"
+      links:
+        - db4
+      environment:
+        - DATABASE4_HOST=db4
+        - DATABASE4_PORT=9042
+        - DATABASE4_KEYSPACE=new
+      volumes:
+        - ./systemapi:/webapp
       command: bash -c "npm install && npm start"
   db:
     container_name: db
@@ -86,10 +103,10 @@ services:
       - ./neo4j-data:/data/
     environment:
       - NEO4J_AUTH=none
-  # db4:
-  #   container_name: db4
-  #   ports:
-  #     - "7000:7000"
-  #   image: cassandra
-  #   volumes:
-  #     - ./cassandra-data:/var/lib/cassandra
+  db4:
+    container_name: db4
+    ports:
+      - "9042:9042"
+    image: cassandra
+    volumes:
+      - ./cassandra-data:/var/lib/cassandra

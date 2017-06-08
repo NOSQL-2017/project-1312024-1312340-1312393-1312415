@@ -62,10 +62,11 @@ passport.use(new Strategy({passReqToCallback: true}, function (req, email, passw
             password
         }
     }).then(function (response) {
-        if (response.data) {
-            return cb(null, response.data, req.flash('info', 'welcome back'));
+        console.log(response.data);
+        if (response.data.success) {
+            return cb(null, response.data.user, req.flash('info', 'welcome back'));
         } else {
-            console.log("not ok");
+            return cb(null, false, req.flash('info', 'wrong email or password'));
         }
     })
 

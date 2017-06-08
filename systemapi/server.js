@@ -1,8 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var friend = require('./routes/friend');
-var post = require('./routes/post');
-var follow = require('./routes/follow');
+var data = require("./routes/data");
+
 
 var app = express();
 var allowCrossDomain = function(req, res, next) {
@@ -17,11 +16,10 @@ app.use(bodyParser.json());
 app.use(allowCrossDomain);
 
 
+app.use('/data', data);
 
-app.set('port', (process.env.PORT || 3000));
-app.use('/friend', friend);
-app.use('/follow', follow);
-app.use('/post', post);
-app.listen(app.get('port'), function(){
-    console.log('relation api is on');
+
+
+app.listen('3000', function(){
+    console.log('system api is on');
 });

@@ -1,0 +1,65 @@
+<h1 id="title">
+
+</h1>
+<h3 id="uploader">
+
+</h3>
+<div id="image-div">
+
+</div>
+<p id="description">
+
+</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
+<script>
+    function follow(followId){
+        axios.post("{{url2}}/follow/", {
+            id: '{{session._id}}',
+            followId
+        }).then(function(res){
+            load();
+        })
+    }
+    function unFollow(followId){
+        axios.post("{{url2}}/follow/delete", {
+            id: '{{session._id}}',
+            followId
+        }).then(function(res){
+            load();
+        })
+    }
+    function CheckFollow(followId) {
+        axios.post("{{url2}}/follow/check", {
+            id: '{{session._id}}',
+            followId
+        }).then(function (res) {
+            if (res.data.success) {
+                if (res.data.check) {
+                    $("#uploader").append(`<a class="btn btn-danger" onClick="unFollow('${followId}')">unFollow</a>`);
+                    return;
+                }
+                $("#uploader").append(`<a onClick="follow('${followId}')" class="btn btn-success">Follow</a>`);
+            }
+        })
+    }
+    function load() {
+        axios.post("{{url}}/post/{{id}}").then(function (res) {
+            if (res.data.success) {
+                var post = res.data.post;
+                $("#title").empty();
+                $('#image-div').empty();
+                $('#uploader').empty();
+                $("#description").empty();
+                $("#uploader").append("by " + res.data.user.email);
+                $('#title').append(post.title);
+                $('#image-div').append(`<img src=${post.url} >`)
+                $("#description").append("description: " + post.description);
+                CheckFollow(res.data.user._id);
+            }
+        })
+    }
+    window.onload = function () {
+        load();
+    }
+
+</script>

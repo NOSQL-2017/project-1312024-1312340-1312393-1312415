@@ -5,3 +5,7 @@
 .error-message{
     color: red;
 }
+.center{
+    margin: auto;
+    text-align: center;
+}

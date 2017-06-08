@@ -4,14 +4,15 @@ var _ = require('lodash');
 var User = require('../models/User');
 
 router.post('/', function (req, res) {
-    var body = _.pick(req.body.data, ['email']);
-    if (body) {
-        User.findOne(body).then(function (user) {
-            if(user.password === body.password){
-                res.send(user);
+    if (req.body.data.email) {
+        User.findOne({email: req.body.data.email}).then(function (user) {
+            if(user && user.password === req.body.data.password){
+                res.send({user, success: true});
+                return;
             }
+            res.send({success: false});
         }).catch(function (e) {
-            res.send(e);
+            res.send({success: false});
         })
     }
 

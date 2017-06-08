@@ -21,11 +21,6 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: [true, "require avatar"]
   },
-  posts: [
-    {
-      type: mongoose.Schema.Types.ObjectId, ref: 'posts'
-    }
-  ],
   name: {
     type: String,
     required: [true, "require name"]

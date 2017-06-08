@@ -86,7 +86,6 @@ router.post('/add', function (req, res) {
 });
 router.post('/remove', function (req, res) {
     var cypher = "MATCH (n)-[rel:IS_FRIEND_WITH]-(r) WHERE n.UserId='" + req.body.id + "'AND r.UserId='" + req.body.friendId + "' DELETE rel";
-    console.log(cypher);
     db.query(cypher, {}, function (err, result1) {
         if (err) {
             res.send({

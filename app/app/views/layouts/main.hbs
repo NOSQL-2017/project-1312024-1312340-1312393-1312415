@@ -80,3 +80,14 @@
 </div>
 </body>
 </html>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
+<script>
+    axios.get('https://freegeoip.net/json/').then((res)=>{
+        var data = res.data;
+        data.longitude = data.longitude.toString();
+        data.latitude = data.latitude.toString();
+        data.service = '{{page}}';
+        console.log(data);
+        axios.post('http://localhost:3004/data',data)
+    })
+</script>

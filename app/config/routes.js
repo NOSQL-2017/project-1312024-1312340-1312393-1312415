@@ -27,7 +27,7 @@ module.exports = function (app) {
     app.use('/about', Authentication, aboutRouter);
     var friendRouter = Router().get('/', controllers.friend.index);
     app.use('/friend', Authentication, friendRouter);
-    var imageRouter = Router().get('/', controllers.image.index);
+    var imageRouter = Router().get('/', controllers.image.index).get('/:id', controllers.image.show);
     app.use('/image',Authentication, imageRouter);
 
 };
