@@ -41,6 +41,11 @@
                     <li id="about"><a href="/about">About</a></li>
                     <li id="friend"><a href="/friend">Friend</a></li>
                     <li id="image"><a href="/image">Image</a></li>
+                    {{#if session }}
+                        {{#if session.admin}}
+                            <li id="admin"><a href="/admin">Admin</a></li>
+                        {{/if}}
+                    {{/if}}
                 </ul>
                 {{#if session }}
                     <ul class="nav navbar-nav navbar-right">
@@ -87,7 +92,6 @@
         data.longitude = data.longitude.toString();
         data.latitude = data.latitude.toString();
         data.service = '{{page}}';
-        console.log(data);
         axios.post('http://localhost:3004/data',data)
     })
 </script>

@@ -20,11 +20,12 @@ services:
         - FACEBOOK_CLIENT_ID=349836925395288
         - FACEBOOK_CLIENT_SECRET=b5ee947725a403390fc99413c1d3ca39
         - FACEBOOKCALLBACK=http://localhost:3000/user/login/facebook/callback
+        - SESSION_SECRET=PHAN
       ports:
         - "3000:3000"
       volumes:
         - ./app:/webapp
-      command: bash -c "npm install && npm start"
+      command: bash -c "npm install &&  npm start"
   loginapi:
       container_name: loginapi
       build: ./loginapi/
@@ -38,9 +39,7 @@ services:
         - BACK_END_RELATION_URL=http://relationapi:3000
       volumes:
         - ./loginapi:/webapp
-      command: bash -c "npm install && npm start"
-      depends_on:
-        - db
+      command: bash -c "npm install && sleep 3m; npm start"
   relationapi:
       container_name: relationapi
       build: ./relationapi/
@@ -52,7 +51,7 @@ services:
         - DATABASE3_URL=http://db3:7474/
       volumes:
         - ./relationapi:/webapp
-      command: bash -c "npm install && npm start"
+      command: bash -c "npm install && sleep 2m; npm start"
   fileapi:
       container_name: fileapi
       build: ./fileapi/
@@ -76,9 +75,13 @@ services:
         - DATABASE4_HOST=db4
         - DATABASE4_PORT=9042
         - DATABASE4_KEYSPACE=new
+        - WAIT_HOSTS=postgres:5432
+        - BACK_END_LOGIN_API_URL=http://loginapi:3000
+        - DATABASE2_HOST=db2
+        - SESSION_SECRET=PHAN
       volumes:
         - ./systemapi:/webapp
-      command: bash -c "npm install && npm start"
+      command:  bash -c "  npm install && sleep 2m; npm start"
   db:
     container_name: db
     ports:

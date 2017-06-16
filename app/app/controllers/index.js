@@ -3,5 +3,6 @@ module.exports = {
     user: require('./userController'),
     about: require('./aboutController'),
     friend: require('./friendController'),
-    image: require('./imageController')
+    image: require('./imageController'),
+    admin: require('./adminController')
 };
