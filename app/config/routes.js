@@ -24,10 +24,12 @@ module.exports = function (app) {
         .get('/register', controllers.user.loadRegister);
     app.use('/user', userRouter);
     var aboutRouter = Router().get('/', controllers.about.index);
-    app.use('/about', Authentication, aboutRouter);
+    app.use('/about',  aboutRouter);
     var friendRouter = Router().get('/', controllers.friend.index);
     app.use('/friend', Authentication, friendRouter);
     var imageRouter = Router().get('/', controllers.image.index).get('/:id', controllers.image.show);
     app.use('/image',Authentication, imageRouter);
+    var adminRouter = Router().get('/', controllers.admin.index);
+    app.use('/admin',Authentication, adminRouter);
 
 };

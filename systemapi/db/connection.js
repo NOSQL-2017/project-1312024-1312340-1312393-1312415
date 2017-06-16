@@ -33,11 +33,9 @@ models.connect(function(err) {
         longitude: "text",
         service: "text"
       },
-      key: ["id"]
+      key: [["id", "country_name", "service"]]
     },
-    function(err, UserModel) {
-        
-    }
+    function(err, UserModel) {}
   );
 });
 module.exports = models;

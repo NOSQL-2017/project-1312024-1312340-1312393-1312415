@@ -17,6 +17,10 @@ const UserSchema = mongoose.Schema({
       message: "{VALUE} is not email"
     }
   },
+  admin:{
+    type: Boolean,
+    default: false
+  },
   avatar: {
     type: String,
     required: [true, "require avatar"]
