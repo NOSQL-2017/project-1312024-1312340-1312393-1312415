@@ -1,9 +1,16 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
+var sleep = require('sleep');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DATABASE1_URL)
-    .then(
-        console.log('connected to database'))
-    .catch(function (e) {
-        console.log('error: ' + e);
+function connection() {
+  mongoose
+    .connect(process.env.DATABASE1_URL)
+    .then(console.log("connected to database"))
+    .catch(function(e) {
+      console.log("working ");
+      sleep.sleep(3)
+      connection();
+      return;
     });
+}
+connection();

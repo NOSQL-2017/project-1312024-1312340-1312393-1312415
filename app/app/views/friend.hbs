@@ -5,39 +5,42 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
 <script>
-
     function AddFriend(friendId) {
 
         axios
-                .post('{{url2}}/friend/add',{
-                    id: '{{session._id}}',
-                    friendId: friendId
-                })
-                .then(function (res) {
-                    if(res.data.success){
-                        GetFriend();
-                    }
-                })
+            .post('{{url2}}/friend/add', {
+                friendId: friendId
+            }, { withCredentials: true })
+            .then(function (res) {
+                if (res.data.success) {
+                    GetFriend();
+                }
+                else{
+                    console.log(res.data.message);
+                }
+            }).catch((err)=>{
+                console.log(err)
+            })
     }
     function RemoveFriend(friendId) {
         axios
-                .post('{{url2}}/friend/remove',{
-                    id: '{{session._id}}',
-                    friendId: friendId
-                })
-                .then(function (res) {
-                    if(res.data.success){
-                        GetFriend();
-                    }
-                })
+            .post('{{url2}}/friend/remove', {
+                friendId: friendId
+            }, { withCredentials: true })
+            .then(function (res) {
+                if (res.data.success) {
+                    GetFriend();
+                }
+            })
     }
     function GetFriend() {
         Check = 'R';
         var $friendList = $('#friendList');
         $friendList.empty();
         axios
-                .get('{{url}}/friend?id={{session._id}}')
-                .then(function (res) {
+            .get('{{url}}/friend', { withCredentials: true })
+            .then(function (res) {
+                if (res.data.success) {
                     $.each(res.data.friends, function (i, friend) {
                         var a;
                         a = `<div class="col-sm-4 friend-block"><img src="${friend.avatar}" class="small-avatar"><label >  ${friend.name}  </label><button type="submit" class="btn btn-danger" style="margin-left: 20px " onclick="RemoveFriend('${friend._id}')">Remove</button> </div>`;
@@ -48,9 +51,14 @@
                         a = `<div class="col-sm-4 friend-block"><img src="${friend.avatar}" class="small-avatar"><label >  ${friend.name}  </label><button type="submit" class="btn btn-success" style="margin-left: 20px " onclick="AddFriend('${friend._id}')">Add</button> </div>`;
                         $friendList.append(a);
                     })
-                })
+                }else{
+                    console.log(res.data.message);
+                }
+
+            })
     }
     window.onload = function () {
         GetFriend();
     }
+
 </script>

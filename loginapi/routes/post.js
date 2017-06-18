@@ -13,7 +13,7 @@ router.post("/", multipartMiddleware, function(req, res) {
     title: req.body.title,
     description: req.body.description,
     url: req.body.url,
-    user: req.body.id
+    user: req.user.id
   });
   post
     .save()
@@ -21,11 +21,14 @@ router.post("/", multipartMiddleware, function(req, res) {
       axios
         .post(process.env.BACK_END_RELATION_URL + "/post", {
           _id: post._id,
-          user: req.body.id
+          user: req.user.id
         })
         .then(function(response) {
           if (!response.data.success) {
-            console.log(err);
+            res.send({
+              success: false,
+              messages: response.data.message
+            });
           }
           res.send({
             success: true,
@@ -34,16 +37,16 @@ router.post("/", multipartMiddleware, function(req, res) {
         });
     })
     .catch(function(e) {
-      var messages = [];
+      var message;
       if (e.errors.title) {
-        messages.push(e.errors.title.message);
+        message = e.errors.title.message;
       }
       if (e.errors.description) {
-        messages.push(e.errors.description.message);
+        message = e.errors.description.message;
       }
       res.send({
         success: false,
-        messages
+        message
       });
     });
 });
@@ -56,9 +59,16 @@ router.get("/", function(req, res) {
   });
 });
 router.get("/friend", function(req, res) {
+  if (!req.user) {
+    res.send({
+      success: false,
+      message: "need to login"
+    });
+    return;
+  }
   axios
     .post(process.env.BACK_END_RELATION_URL + "/post/findFriendPost", {
-      id: req.query.id
+      id: req.user.id
     })
     .then(function(response) {
       console.log(response.data.id);
@@ -70,19 +80,28 @@ router.get("/friend", function(req, res) {
         res.send({
           success: true,
           posts
-        })
+        });
       });
-    }).catch(function(err){
+    })
+    .catch(function(err) {
       console.log(err);
       res.send({
-        success: false
-      })
+        success: false,
+        message: err.message
+      });
     });
 });
 router.get("/follow", function(req, res) {
+  if (!req.user) {
+    res.send({
+      success: false,
+      message: "need to login"
+    });
+    return;
+  }
   axios
     .post(process.env.BACK_END_RELATION_URL + "/post/findFollowPost", {
-      id: req.query.id
+      id: req.user.id
     })
     .then(function(response) {
       console.log(response.data.id);
@@ -94,13 +113,14 @@ router.get("/follow", function(req, res) {
         res.send({
           success: true,
           posts
-        })
+        });
       });
-    }).catch(function(err){
+    })
+    .catch(function(err) {
       console.log(err);
       res.send({
         success: false
-      })
+      });
     });
 });
 router.post("/:id", function(req, res) {
@@ -112,7 +132,10 @@ router.post("/:id", function(req, res) {
         })
         .then(function(response) {
           if (!response.data.success) {
-            console.log(err);
+            res.send({
+              success: false,
+              message: response.data.message
+            });
           }
           User.findById(response.data.id).then(function(user) {
             res.send({

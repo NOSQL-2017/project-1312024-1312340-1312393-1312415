@@ -34,12 +34,18 @@ services:
       links:
         - db
         - relationapi
+        - db2
       environment:
         - DATABASE1_URL=mongodb://db:27017/photoApp
         - BACK_END_RELATION_URL=http://relationapi:3000
+        - BACK_END_SYSTEM_URL=http://systemapi:3000
+        - CLIENT_SIDE_URL=http://localhost:3000
+        - BACK_END_FILE_URL=http://fileapi:3000  
+        - SESSION_SECRET=PHAN 
+        - DATABASE2_HOST=db2     
       volumes:
         - ./loginapi:/webapp
-      command: bash -c "npm install && sleep 3m; npm start"
+      command: bash -c "npm install &&  npm start"
   relationapi:
       container_name: relationapi
       build: ./relationapi/
@@ -47,8 +53,13 @@ services:
         - "3002:3000"
       links:
         - db3
+        - db2
       environment:
         - DATABASE3_URL=http://db3:7474/
+        - SESSION_SECRET=PHAN 
+        - DATABASE2_HOST=db2 
+        - CLIENT_SIDE_URL=http://localhost:3000
+        - BACK_END_LOGIN_API_URL=http://loginapi:3000
       volumes:
         - ./relationapi:/webapp
       command: bash -c "npm install && sleep 2m; npm start"
@@ -60,7 +71,10 @@ services:
       links:
         - db
       environment:
-        - DATABASE1_URL=mongodb://db:27017/photoApp
+        - SESSION_SECRET=PHAN 
+        - DATABASE2_HOST=db2 
+        - CLIENT_SIDE_URL=http://localhost:3000
+        - BACK_END_LOGIN_API_URL=http://loginapi:3000
       volumes:
         - ./fileapi:/webapp
       command: bash -c "npm install && npm start"
@@ -75,13 +89,13 @@ services:
         - DATABASE4_HOST=db4
         - DATABASE4_PORT=9042
         - DATABASE4_KEYSPACE=new
-        - WAIT_HOSTS=postgres:5432
+        - CLIENT_SIDE_URL=http://localhost:3000
         - BACK_END_LOGIN_API_URL=http://loginapi:3000
         - DATABASE2_HOST=db2
         - SESSION_SECRET=PHAN
       volumes:
         - ./systemapi:/webapp
-      command:  bash -c "  npm install && sleep 2m; npm start"
+      command:  bash -c "  npm install && npm start"
   db:
     container_name: db
     ports:

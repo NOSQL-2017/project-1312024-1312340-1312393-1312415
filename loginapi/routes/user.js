@@ -23,7 +23,6 @@ var userBodyHandle = function (req, res, result) {
         avatar: result.url
     });
     user.save().then(function (user) {
-        console.log(process.env.BACK_END_RELATION_URL + '/friend');
         axios.post(process.env.BACK_END_RELATION_URL + '/friend', user).then(function (response) {
             if(!response.data.success){
                 console.log(err);
@@ -81,18 +80,29 @@ router.get('/', function (req, res) {
     User
         .findById(req.query.id)
         .then(function (user) {
-            res.send(user);
+            var result = {
+                name: user.name,
+                avatar: user.avatar,
+                email: user.email
+            }
+            res.send({
+                result
+            });
         }, function (err) {
             res.send(null);
         })
 
 });
 router.post('/find', function (req, res) {
-    console.log(req.body);
     User.findOne(req.body)
         .then(function (user) {
+            var result = {
+                name: user.name,
+                avatar: user.avatar,
+                email: user.email
+            }
             res.send({
-                user
+                result
             });
         }).catch(function (err) {
         res.send({

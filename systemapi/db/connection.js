@@ -1,5 +1,5 @@
 var Cassandra = require("express-cassandra");
-console.log(process.env.DATABASE4_HOST);
+var sleep = require("sleep");
 var models = Cassandra.createClient({
   clientOptions: {
     contactPoints: [process.env.DATABASE4_HOST],
@@ -17,25 +17,40 @@ var models = Cassandra.createClient({
   }
 });
 
-models.connect(function(err) {
-  if (err) throw err;
+function connection() {
+  models.connect(function(err) {
+    if (err) {
+      console.log(err.message);
+      sleep.sleep(2);
+      connection();
+      return;
+    }
 
-  var MyModel = models.loadSchema(
-    "Data",
-    {
-      fields: {
-        id: "text",
-        ip: "text",
-        country_code: "text",
-        country_name: "text",
-        city: "text",
-        latitude: "text",
-        longitude: "text",
-        service: "text"
+    var MyModel = models.loadSchema(
+      "Data",
+      {
+        fields: {
+          id: "text",
+          ip: "text",
+          country_code: "text",
+          country_name: "text",
+          city: "text",
+          latitude: "text",
+          longitude: "text",
+          service: "text"
+        },
+        key: [["id", "country_name", "service"]]
       },
-      key: [["id", "country_name", "service"]]
-    },
-    function(err, UserModel) {}
-  );
-});
+      function(err, UserModel) {
+        if (err) {
+          console.log(err.message);
+          sleep.sleep(2);
+          connection();
+          return;
+        }
+      }
+    );
+  });
+}
+connection();
 module.exports = models;

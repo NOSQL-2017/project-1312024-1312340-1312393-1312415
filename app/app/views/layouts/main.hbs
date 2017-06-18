@@ -92,6 +92,6 @@
         data.longitude = data.longitude.toString();
         data.latitude = data.latitude.toString();
         data.service = '{{page}}';
-        axios.post('http://localhost:3004/data',data)
+        axios.post('http://localhost:3004/data',data, { withCredentials: true })
     })
 </script>
