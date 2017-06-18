@@ -5,6 +5,13 @@ var axios = require("axios");
 var models = require("../db/connection");
 var router = express.Router();
 router.post("/", function(req, res) {
+  if(!req.user){
+    res.status(401).send({
+      success: false,
+      message: "need to be login"
+    });
+    return;
+  }
   var body = _.pick(req.body, [
     "id",
     "ip",
@@ -32,6 +39,13 @@ router.post("/", function(req, res) {
   });
 });
 router.get("/service", function(req, res) {
+  if(!req.user){
+    res.status(401).send({
+      success: false,
+      message: "need to be login"
+    });
+    return;
+  }
   if (!req.user.admin) {
     res.status(401).send({
       success: false,
@@ -63,6 +77,13 @@ router.get("/service", function(req, res) {
   );
 });
 router.get("/countryName", function(req, res) {
+  if(!req.user){
+    res.status(401).send({
+      success: false,
+      message: "need to be login"
+    });
+    return;
+  }
   if (!req.user.admin) {
     res.status(401).send({
       success: false,

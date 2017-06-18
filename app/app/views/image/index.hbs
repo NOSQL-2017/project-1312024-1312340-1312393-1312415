@@ -34,7 +34,7 @@
         <button id="all" class="btn btn-success" onclick="All()">
             All image
         </button>
-        <button id="follow-button" class="btn btn-default" onclick="LoadFollow()" >
+        <button id="follow-button" class="btn btn-default" onclick="LoadFollow()">
             Followed
         </button>
         <button id="friend-button" class="btn btn-default" onclick="LoadFriend()">
@@ -49,19 +49,19 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
     <script>
-        function All(){
+        function All() {
             $("#follow-button").removeClass().addClass("btn btn-default");
             $("#friend-button").removeClass().addClass("btn btn-default");
             $("#all").removeClass().addClass("btn btn-success");
             LoadPost();
 
         }
-        function LoadFriend(){
+        function LoadFriend() {
             $("#follow-button").removeClass().addClass("btn btn-default");
             $("#all").removeClass().addClass("btn btn-default");
             $("#friend-button").removeClass().addClass("btn btn-success");
             axios
-                .get('{{url}}/post/friend?id={{session._id}}')
+                .get('{{url}}/post/friend', { withCredentials: true })
                 .then(function (res) {
                     $("#img-list").empty();
                     if (res.data.success) {
@@ -72,12 +72,12 @@
                     }
                 })
         }
-        function LoadFollow(){
+        function LoadFollow() {
             $("#friend-button").removeClass().addClass("btn btn-default");
             $("#all").removeClass().addClass("btn btn-default");
             $("#follow-button").removeClass().addClass("btn btn-success");
             axios
-                .get('{{url}}/post/follow?id={{session._id}}')
+                .get('{{url}}/post/follow', { withCredentials: true })
                 .then(function (res) {
                     $("#img-list").empty();
                     if (res.data.success) {
@@ -89,15 +89,20 @@
                 })
         }
         function LoadPost() {
+            $('#inputTitle').val("");
+            $('#inputDescription').val("");
+            $('#inputPicture').val("");
             axios
-                .get('{{url}}/post?id={{session._id}}')
+                .get('{{url}}/post?id={{session._id}}', { withCredentials: true })
                 .then(function (res) {
                     $("#img-list").empty();
                     if (res.data.success) {
                         res.data.posts.map(function (post) {
                             $("#img-list").append(` <a href="/image/${post._id}" class="col-xs-4"><div><h1>${post.title}</h1><img width="100%" height="300" src="${post.url}"/></div></a>`)
                         })
-
+                    }
+                    else {
+                        console.log(res.data)
                     }
                 })
         }
@@ -111,32 +116,36 @@
             axios.post("{{url2}}/", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                withCredentials: true
             }).then(function (res) {
-                var formData = new FormData();
-                formData.append("title", $('#inputTitle').val());
-                formData.append("description", $('#inputDescription').val());
-                formData.append("url", "{{url2}}" + res.data.url);
-                formData.append("id", "{{session._id}}");
-                axios.post("{{url}}/post", formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                })
-                    .then(function (res) {
-                        if (res.data.success) {
-                            LoadPost();
-                            return;
-                        }
-                        $("#error-messages").empty();
-                        res.data.messages.map(function (message, index) {
-                            $("#error-messages").append(`<div id='${index}' class="error-message">${message}</div>`)
-                        })
+                if (res.data.success) {
+                    var formData = new FormData();
+                    formData.append("title", $('#inputTitle').val());
+                    formData.append("description", $('#inputDescription').val());
+                    formData.append("url", "{{url2}}" + res.data.url);
+                    axios.post("{{url}}/post", formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        },
+                        withCredentials: true
+                    })
+                        .then(function (res) {
+                            if (res.data.success) {
+                                LoadPost();
+                                return;
+                            }
+                            $("#error-messages").empty();
 
-                    });
+                            $("#error-messages").append(`<div id='${index}' class="error-message">${res.data.message}</div>`)
+
+                        });
+                } else {
+                    console.log(res.data.message);
+                }
+
             })
 
             return false;
         }
-
     </script>

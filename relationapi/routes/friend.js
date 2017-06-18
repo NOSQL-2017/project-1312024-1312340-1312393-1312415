@@ -43,10 +43,9 @@ router.post('/get', function (req, res) {
 
 });
 router.post('/add', function (req, res) {
-
     var cypher1 = "MATCH (n)"
         + " WHERE labels(n)='User' and n.UserId ='"
-        + req.body.id
+        + req.user._id
         + "' RETURN n ";
     var cypher2 = "MATCH (n)"
         + " WHERE labels(n)='User' and n.UserId ='"
@@ -85,7 +84,7 @@ router.post('/add', function (req, res) {
     });
 });
 router.post('/remove', function (req, res) {
-    var cypher = "MATCH (n)-[rel:IS_FRIEND_WITH]-(r) WHERE n.UserId='" + req.body.id + "'AND r.UserId='" + req.body.friendId + "' DELETE rel";
+    var cypher = "MATCH (n)-[rel:IS_FRIEND_WITH]-(r) WHERE n.UserId='" + req.user._id + "'AND r.UserId='" + req.body.friendId + "' DELETE rel";
     db.query(cypher, {}, function (err, result1) {
         if (err) {
             res.send({

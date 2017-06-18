@@ -10,7 +10,7 @@ var axios = require("axios");
 var client  = redis.createClient(6379, process.env.DATABASE2_HOST || "localhost");
 var app = express();
 var allowCrossDomain = function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", process.env.CLIENT_SIDE_URL);
   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
   res.header("Access-Control-Allow-Credentials","true")
   res.header("Access-Control-Allow-Headers", 'Content-Type, Content-Range, Content-Disposition, Content-Description');
@@ -40,9 +40,7 @@ passport.deserializeUser(function (_id, done) {
 });
 app.use(passport.initialize());
 app.use(passport.session());
-app.get('/', (req,res)=>{
-    res.send(req.session)
-})
+
 app.use("/data", data);
 
 app.listen("3000", function() {

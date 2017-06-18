@@ -12,27 +12,30 @@
 </p>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
 <script>
-    function follow(followId){
+    function follow(followId) {
         axios.post("{{url2}}/follow/", {
-            id: '{{session._id}}',
             followId
-        }).then(function(res){
+        }, { withCredentials: true }).then(function (res) {
+            if (!res.data.success) {
+                console.log(res.data.message);
+            }
             load();
         })
     }
-    function unFollow(followId){
+    function unFollow(followId) {
         axios.post("{{url2}}/follow/delete", {
-            id: '{{session._id}}',
             followId
-        }).then(function(res){
+        }, { withCredentials: true }).then(function (res) {
+            if (!res.data.success) {
+                console.log(res.data.message);
+            }
             load();
         })
     }
     function CheckFollow(followId) {
         axios.post("{{url2}}/follow/check", {
-            id: '{{session._id}}',
             followId
-        }).then(function (res) {
+        }, { withCredentials: true }).then(function (res) {
             if (res.data.success) {
                 if (res.data.check) {
                     $("#uploader").append(`<a class="btn btn-danger" onClick="unFollow('${followId}')">unFollow</a>`);
@@ -40,10 +43,13 @@
                 }
                 $("#uploader").append(`<a onClick="follow('${followId}')" class="btn btn-success">Follow</a>`);
             }
+            else {
+                console.log(res.data.message);
+            }
         })
     }
     function load() {
-        axios.post("{{url}}/post/{{id}}").then(function (res) {
+        axios.post("{{url}}/post/{{id}}", {}, { withCredentials: true }).then(function (res) {
             if (res.data.success) {
                 var post = res.data.post;
                 $("#title").empty();
@@ -55,6 +61,9 @@
                 $('#image-div').append(`<img src=${post.url} >`)
                 $("#description").append("description: " + post.description);
                 CheckFollow(res.data.user._id);
+            }
+            else {
+                console.log(res.data);
             }
         })
     }
