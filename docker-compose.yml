@@ -58,6 +58,7 @@ services:
         - DATABASE3_URL=http://db3:7474/
         - SESSION_SECRET=PHAN 
         - DATABASE2_HOST=db2 
+        - FRONT_END_RELATION_URL=http://localhost:3002
         - CLIENT_SIDE_URL=http://localhost:3000
         - BACK_END_LOGIN_API_URL=http://loginapi:3000
       volumes:

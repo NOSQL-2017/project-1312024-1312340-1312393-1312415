@@ -7,7 +7,7 @@ function connection() {
     .connect(process.env.DATABASE1_URL)
     .then(console.log("connected to database"))
     .catch(function(e) {
-      console.log("working ");
+      console.log("waiting ");
       sleep.sleep(3)
       connection();
       return;

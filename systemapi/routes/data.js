@@ -5,7 +5,7 @@ var axios = require("axios");
 var models = require("../db/connection");
 var router = express.Router();
 router.post("/", function(req, res) {
-  if(!req.user){
+  if (!req.user) {
     res.status(401).send({
       success: false,
       message: "need to be login"
@@ -39,7 +39,7 @@ router.post("/", function(req, res) {
   });
 });
 router.get("/service", function(req, res) {
-  if(!req.user){
+  if (!req.user) {
     res.status(401).send({
       success: false,
       message: "need to be login"
@@ -77,7 +77,7 @@ router.get("/service", function(req, res) {
   );
 });
 router.get("/countryName", function(req, res) {
-  if(!req.user){
+  if (!req.user) {
     res.status(401).send({
       success: false,
       message: "need to be login"
@@ -98,6 +98,12 @@ router.get("/countryName", function(req, res) {
     },
     function(err, results) {
       var country_name = {};
+      if (!results) {
+        res.send({
+          success: false,
+          message: "no result"
+        });
+      }
       results.map(result => {
         if (Object.keys(country_name).indexOf(result.country_name) !== -1) {
           country_name[result.country_name] += 1;
@@ -106,7 +112,9 @@ router.get("/countryName", function(req, res) {
         }
       });
       Object.keys(country_name).map(obj => {
-        country_name[obj] = (country_name[obj] * 100 / results.length).toFixed(2);
+        country_name[obj] = (country_name[obj] * 100 / results.length).toFixed(
+          2
+        );
       });
       res.send({ success: true, country_name });
     }

@@ -7,6 +7,9 @@
 <div id="image-div">
 
 </div>
+<div id="price-div">
+
+</div>
 <p id="description">
 
 </p>
@@ -15,54 +18,104 @@
     function follow(followId) {
         axios.post("{{url2}}/follow/", {
             followId
-        }, { withCredentials: true }).then(function (res) {
+        }, {
+            withCredentials: true
+        }).then(function (res) {
             if (!res.data.success) {
                 console.log(res.data.message);
             }
             load();
         })
     }
+
     function unFollow(followId) {
         axios.post("{{url2}}/follow/delete", {
             followId
-        }, { withCredentials: true }).then(function (res) {
+        }, {
+            withCredentials: true
+        }).then(function (res) {
             if (!res.data.success) {
                 console.log(res.data.message);
             }
             load();
         })
     }
+
     function CheckFollow(followId) {
+        if ('{{session._id}}' === followId) {
+            return;
+        }
         axios.post("{{url2}}/follow/check", {
             followId
-        }, { withCredentials: true }).then(function (res) {
+        }, {
+            withCredentials: true
+        }).then(function (res) {
             if (res.data.success) {
                 if (res.data.check) {
-                    $("#uploader").append(`<a class="btn btn-danger" onClick="unFollow('${followId}')">unFollow</a>`);
+                    $("#uploader").append(
+                        `<a class="btn btn-danger" onClick="unFollow('${followId}')">unFollow</a>`);
                     return;
                 }
                 $("#uploader").append(`<a onClick="follow('${followId}')" class="btn btn-success">Follow</a>`);
-            }
-            else {
+            } else {
                 console.log(res.data.message);
             }
         })
     }
+
+    function Buy(price) {
+        axios.post("{{url2}}/buy/", {
+            buyId: '{{id}}',
+            price
+        }, {
+            withCredentials: true
+        }).then(function (res) {
+            if (!res.data.success) {
+                console.log(res.data.message);
+            } else {
+                window.location = res.data.url;
+            }
+            load();
+        })
+    }
+
+    function CheckBuy(price) {
+        axios.post("{{url2}}/buy/check", {
+            buyId: '{{id}}'
+        }, {
+            withCredentials: true
+        }).then(function (res) {
+            if (res.data.success) {
+                if (res.data.check) {
+                    $("#price-div").append(`<a class="btn-price btn btn-info">Already bought</a>`);
+                    return;
+                }
+                $("#price-div").append(`<a onClick='Buy(${price})' class="btn-price btn btn-success">Buy</a>`);
+            } else {
+                console.log(res.data.message);
+            }
+        })
+    }
+
     function load() {
-        axios.post("{{url}}/post/{{id}}", {}, { withCredentials: true }).then(function (res) {
+        axios.post("{{url}}/post/{{id}}", {}, {
+            withCredentials: true
+        }).then(function (res) {
             if (res.data.success) {
                 var post = res.data.post;
                 $("#title").empty();
                 $('#image-div').empty();
                 $('#uploader').empty();
+                $("#price-div").empty();
                 $("#description").empty();
                 $("#uploader").append("by " + res.data.user.email);
                 $('#title').append(post.title);
                 $('#image-div').append(`<img src=${post.url} >`)
                 $("#description").append("description: " + post.description);
+                $("#price-div").append("price: " + post.price + "$");
                 CheckFollow(res.data.user._id);
-            }
-            else {
+                CheckBuy(post.price);
+            } else {
                 console.log(res.data);
             }
         })
@@ -70,5 +123,4 @@
     window.onload = function () {
         load();
     }
-
 </script>

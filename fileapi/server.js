@@ -48,12 +48,13 @@ app.use(passport.session());
 
 
 app.post("/", multipartMiddleware, function(req, res) {
-  if(!req.user){
-    res.send({
-          success: false,
-          message: "need to login"
-      })
-  }
+  if (!req.user) {
+    res.status(401).send({
+      success: false,
+      message: "need to login"
+    });
+    return
+   }
   var time = new Date();
   var url = "/picture/" + time.getTime() + path.extname(req.files.url.path)
   fs.rename(

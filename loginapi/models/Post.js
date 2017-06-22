@@ -13,6 +13,10 @@ const PostSchema = mongoose.Schema({
   description: {
     type: String,
     required: [true, "require description"]
+  },
+  price: {
+    type: Number,
+    required: [true, "require description"]
   }
 });
 

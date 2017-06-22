@@ -20,7 +20,7 @@ var models = Cassandra.createClient({
 function connection() {
   models.connect(function(err) {
     if (err) {
-      console.log(err.message);
+      console.log("waiting");
       sleep.sleep(2);
       connection();
       return;
@@ -43,7 +43,7 @@ function connection() {
       },
       function(err, UserModel) {
         if (err) {
-          console.log(err.message);
+          console.log("waiting");
           sleep.sleep(2);
           connection();
           return;

@@ -1,78 +1,82 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js">
-
 </script>
 <script>
     window.onload = function () {
-        axios.get("{{url}}/data/service", { withCredentials: true }).then((res) => {
+        axios.get("{{url}}/data/service", {
+            withCredentials: true
+        }).then((res) => {
             var data = res.data.service;
             var dataPoints = [];
             for (var key in data) {
-                dataPoints.push({ y: data[key], legendText: key, label: key });
-            }
-            var chart = new CanvasJS.Chart("chartContainer",
-                {
-                    title: {
-                        text: "Web service percent"
-                    },
-                    animationEnabled: true,
-                    legend: {
-                        verticalAlign: "center",
-                        horizontalAlign: "left",
-                        fontSize: 20,
-                        fontFamily: "Helvetica"
-                    },
-                    theme: "theme2",
-                    data: [
-                        {
-                            type: "pie",
-                            indexLabelFontFamily: "Garamond",
-                            indexLabelFontSize: 20,
-                            indexLabel: "{label} {y}%",
-                            startAngle: -20,
-                            showInLegend: true,
-                            toolTipContent: "{legendText} {y}%",
-                            dataPoints
-                        }
-                    ]
+                dataPoints.push({
+                    y: data[key],
+                    legendText: key,
+                    label: key
                 });
+            }
+            var chart = new CanvasJS.Chart("chartContainer", {
+                title: {
+                    text: "Web service percent"
+                },
+                animationEnabled: true,
+                legend: {
+                    verticalAlign: "center",
+                    horizontalAlign: "left",
+                    fontSize: 20,
+                    fontFamily: "Helvetica"
+                },
+                theme: "theme2",
+                data: [{
+                    type: "pie",
+                    indexLabelFontFamily: "Garamond",
+                    indexLabelFontSize: 20,
+                    indexLabel: "{label} {y}%",
+                    startAngle: -20,
+                    showInLegend: true,
+                    toolTipContent: "{legendText} {y}%",
+                    dataPoints
+                }]
+            });
             chart.render();
         })
-        axios.get("{{url}}/data/countryName", { withCredentials: true }).then((res) => {
+        axios.get("{{url}}/data/countryName", {
+            withCredentials: true
+        }).then((res) => {
             var data = res.data.country_name;
             var dataPoints = [];
             for (var key in data) {
-                dataPoints.push({ y: data[key], legendText: key, label: key });
-            }
-            var chart = new CanvasJS.Chart("chartContainer2",
-                {
-                    title: {
-                        text: "User from country percent"
-                    },
-                    animationEnabled: true,
-                    legend: {
-                        verticalAlign: "center",
-                        horizontalAlign: "left",
-                        fontSize: 20,
-                        fontFamily: "Helvetica"
-                    },
-                    theme: "theme1",
-                    data: [
-                        {
-                            type: "pie",
-                            indexLabelFontFamily: "Garamond",
-                            indexLabelFontSize: 20,
-                            indexLabel: "{label} {y}%",
-                            startAngle: -20,
-                            showInLegend: true,
-                            toolTipContent: "{legendText} {y}%",
-                            dataPoints
-                        }
-                    ]
+                dataPoints.push({
+                    y: data[key],
+                    legendText: key,
+                    label: key
                 });
+            }
+            var chart = new CanvasJS.Chart("chartContainer2", {
+                title: {
+                    text: "User from country percent"
+                },
+                animationEnabled: true,
+                legend: {
+                    verticalAlign: "center",
+                    horizontalAlign: "left",
+                    fontSize: 20,
+                    fontFamily: "Helvetica"
+                },
+                theme: "theme1",
+                data: [{
+                    type: "pie",
+                    indexLabelFontFamily: "Garamond",
+                    indexLabelFontSize: 20,
+                    indexLabel: "{label} {y}%",
+                    startAngle: -20,
+                    showInLegend: true,
+                    toolTipContent: "{legendText} {y}%",
+                    dataPoints
+                }]
+            });
             chart.render();
         })
     }
-
 </script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
 </head>

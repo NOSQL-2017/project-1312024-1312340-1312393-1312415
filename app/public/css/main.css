@@ -9,3 +9,9 @@
     margin: auto;
     text-align: center;
 }
+#price-div{
+    padding-top: 20px;
+}
+.btn-price{
+    margin-left: 20px;
+}

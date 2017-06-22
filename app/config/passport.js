@@ -36,6 +36,7 @@ passport.use(new facebookStrategy({
                 }
             })
             .then(function (res) {
+                console.log(res.data);
                 if (email) {
                     return;
                 }
@@ -62,7 +63,7 @@ passport.use(new Strategy({passReqToCallback: true}, function (req, email, passw
             password
         }
     }).then(function (response) {
-        console.log(response.data);
+        
         if (response.data.success) {
             return cb(null, response.data.user, req.flash('info', 'welcome back'));
         } else {

@@ -8,12 +8,46 @@ var Post = require("../models/Post");
 var multipartMiddleware = multipart();
 var router = express.Router();
 
+router.post("/getPosts", function(req, res) {
+  if (!req.user) {
+    res.status(401).send({
+      success: false,
+      message: "need to login"
+    });
+    return;
+  }
+  Post.find({
+    _id: {
+      $in: req.body.id
+    }
+  })
+    .then(function(posts) {
+      res.send({
+        success: true,
+        posts
+      });
+    })
+    .catch(function(err) {
+      res.status(500).send({
+        success: false,
+        message: err.message
+      });
+    });
+});
 router.post("/", multipartMiddleware, function(req, res) {
+   if (!req.user) {
+    res.status(401).send({
+      success: false,
+      message: "need to login"
+    });
+    return
+   }
   var post = new Post({
     title: req.body.title,
     description: req.body.description,
     url: req.body.url,
-    user: req.user.id
+    user: req.user.id,
+    price: req.body.price
   });
   post
     .save()
@@ -25,10 +59,11 @@ router.post("/", multipartMiddleware, function(req, res) {
         })
         .then(function(response) {
           if (!response.data.success) {
-            res.send({
+            res.status(500).send({
               success: false,
               messages: response.data.message
             });
+            return;
           }
           res.send({
             success: true,
@@ -51,6 +86,13 @@ router.post("/", multipartMiddleware, function(req, res) {
     });
 });
 router.get("/", function(req, res) {
+  if (!req.user) {
+    res.status(401).send({
+      success: false,
+      message: "need to login"
+    });
+    return
+   }
   Post.find({}).then(posts => {
     res.send({
       success: true,
@@ -60,18 +102,17 @@ router.get("/", function(req, res) {
 });
 router.get("/friend", function(req, res) {
   if (!req.user) {
-    res.send({
+    res.status(401).send({
       success: false,
       message: "need to login"
     });
-    return;
-  }
+    return
+   }
   axios
     .post(process.env.BACK_END_RELATION_URL + "/post/findFriendPost", {
       id: req.user.id
     })
     .then(function(response) {
-      console.log(response.data.id);
       Post.find({
         _id: {
           $in: response.data.id
@@ -85,7 +126,7 @@ router.get("/friend", function(req, res) {
     })
     .catch(function(err) {
       console.log(err);
-      res.send({
+      res.status(500).send({
         success: false,
         message: err.message
       });
@@ -93,12 +134,12 @@ router.get("/friend", function(req, res) {
 });
 router.get("/follow", function(req, res) {
   if (!req.user) {
-    res.send({
+    res.status(401).send({
       success: false,
       message: "need to login"
     });
-    return;
-  }
+    return
+   }
   axios
     .post(process.env.BACK_END_RELATION_URL + "/post/findFollowPost", {
       id: req.user.id
@@ -118,12 +159,19 @@ router.get("/follow", function(req, res) {
     })
     .catch(function(err) {
       console.log(err);
-      res.send({
+      res.status(500).send({
         success: false
       });
     });
 });
 router.post("/:id", function(req, res) {
+  if (!req.user) {
+    res.status(401).send({
+      success: false,
+      message: "need to login"
+    });
+    return
+   }
   Post.findById(req.params.id)
     .then(function(post) {
       axios
@@ -147,9 +195,9 @@ router.post("/:id", function(req, res) {
         });
     })
     .catch(function(err) {
-      console.log(err);
-      res.send({
-        success: false
+      res.status(500).send({
+        success: false,
+        message: err.message
       });
     });
 });

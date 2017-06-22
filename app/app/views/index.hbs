@@ -1,1 +1,54 @@
-<h1>WELCOME</h1>
+<h1>
+    WELCOME {{#if session}} {{session.name}} {{/if}}
+</h1>
+
+{{#if session}}
+<h3>Purchase detail </h3>
+<div id="purchase_details">
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
+<script>
+    function LoadYour() {
+        var results;
+        var edit = {};
+        var count = {};
+        var id;
+        axios
+            .post('{{url}}/post/findYourProfit', {}, {
+                withCredentials: true
+            })
+            .then(function (res) {
+                results = res.data.results;
+                id = results.map(function (a) {
+                    return a['b.PostId'];
+                })
+                return axios
+                    .post('{{url2}}/post/getPosts', {
+                        id
+                    }, {
+                        withCredentials: true
+                    })
+            })
+            .then(function (res) {
+                if (res.data.success) {
+                    var posts = res.data.posts;
+                    posts.map(function (post) {
+                        edit[post._id] = post;
+                    })
+                    results.map(function (a) {
+                        if (Object.keys(count).indexOf(a['b.PostId']) !== -1) {
+                            count[a['b.PostId']] += 1;
+                        } else {
+                            count[a['b.PostId']] = 1;
+                        }
+                    })
+                    for (var key in count) {
+                        $('#purchase_details').append(`<div>${count[key]} user have bought <b>${edit[key].title}</b></div>`)
+                    }
+                }
+            })
+    }
+    window.onload = LoadYour()
+</script>
+{{/if}}
