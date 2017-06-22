@@ -8,11 +8,17 @@ var router = express.Router();
 router.post("/check", function(req, res) {
   try {
     if (!req.user) {
-      res.send({
+      res.status(401).send({
         success: false,
         message: "need to login"
       });
       return;
+    }
+    if (req.user._id === req.body) {
+      res.send({
+        success: false,
+        message: "can't follow yourself"
+      });
     }
     var cypher = `MATCH  (p:User {UserId: '${req.user
       ._id}'}), (b:User {UserId: '${req.body
@@ -24,7 +30,7 @@ router.post("/check", function(req, res) {
       });
     });
   } catch (e) {
-    res.send({
+    res.status(500).send({
       success: false,
       message: e.message
     });
@@ -33,7 +39,7 @@ router.post("/check", function(req, res) {
 router.post("/", function(req, res) {
   try {
     if (!req.user) {
-      res.send({
+      res.status(401).send({
         success: false,
         message: "need to login"
       });
@@ -49,7 +55,7 @@ router.post("/", function(req, res) {
     });
   } catch (e) {
     console.log(e);
-    res.send({
+    res.status(500).send({
       success: false,
       message: e.message
     });
@@ -58,7 +64,7 @@ router.post("/", function(req, res) {
 router.post("/delete", function(req, res) {
   try {
     if (!req.user) {
-      res.send({
+      res.status(401).send({
         success: false,
         message: "need to login"
       });
@@ -74,7 +80,7 @@ router.post("/delete", function(req, res) {
     });
   } catch (e) {
     console.log(e);
-    res.send({
+    res.status(500).send({
       success: false,
       message: e.message
     });

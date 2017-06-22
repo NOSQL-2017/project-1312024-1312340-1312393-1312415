@@ -9,6 +9,7 @@ var axios = require("axios");
 var friend = require("./routes/friend");
 var post = require("./routes/post");
 var follow = require("./routes/follow");
+var buy = require("./routes/buy");
 
 var app = express();
 var client = redis.createClient(6379, process.env.DATABASE2_HOST);
@@ -43,14 +44,15 @@ app.use(
     maxAge: null
   })
 );
-passport.deserializeUser(function (_id, done) {
-    axios
-        .get(process.env.BACK_END_LOGIN_API_URL + '/user?id=' + _id)
-        .then(function (response) {
-            done(null, response.data);
-        }, function (err, response) {
-            done(err, response.data);
-        });
+passport.deserializeUser(function(_id, done) {
+  axios.get(process.env.BACK_END_LOGIN_API_URL + "/user?id=" + _id).then(
+    function(response) {
+      done(null, response.data);
+    },
+    function(err, response) {
+      done(err, response.data);
+    }
+  );
 });
 app.use(passport.initialize());
 app.use(passport.session());
@@ -59,6 +61,8 @@ app.set("port", process.env.PORT || 3000);
 app.use("/friend", friend);
 app.use("/follow", follow);
 app.use("/post", post);
+app.use("/buy", buy);
+
 app.listen(app.get("port"), function() {
   console.log("relation api is on");
 });

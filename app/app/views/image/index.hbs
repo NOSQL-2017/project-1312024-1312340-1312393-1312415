@@ -23,6 +23,12 @@
             </div>
         </div>
         <div class="form-group">
+            <label for="inputPrice" class="control-label col-xs-2">Price</label>
+            <div class="col-xs-8">
+                <input name="price" type="number" class="form-control" id="inputPrice" placeholder="price">
+            </div>
+        </div>
+        <div class="form-group">
             <div class="col-xs-offset-4 col-xs-10">
                 <button type="submit" class="btn btn-success">Submit</button>
             </div>
@@ -40,6 +46,12 @@
         <button id="friend-button" class="btn btn-default" onclick="LoadFriend()">
             Friend
         </button>
+        <button id="bought-button" class="btn btn-default" onclick="LoadBought()">
+            Bought
+        </button>
+        <button id="your-button" class="btn btn-default" onclick="LoadYour()">
+            Your image
+        </button>
         </h2>
         <div id="img-list">
 
@@ -49,59 +61,158 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
     <script>
+        function LoadBought() {
+            $("#follow-button").removeClass().addClass("btn btn-default");
+            $("#all").removeClass().addClass("btn btn-default");
+            $("#friend-button").removeClass().addClass("btn btn-default");
+            $("#your-button").removeClass().addClass("btn btn-default");
+            $("#bought-button").removeClass().addClass("btn btn-success");
+            axios
+                .post('{{url3}}/post/findBoughtPost', {}, {
+                    withCredentials: true
+                })
+                .then(function (res) {
+                    return axios
+                        .post('{{url}}/post/getPosts', {
+                            id: res.data.id
+                        }, {
+                            withCredentials: true
+                        })
+
+
+                }).then(function (res) {
+                    $("#img-list").empty();
+                    if (res.data.success) {
+                        res.data.posts.map(function (post) {
+                            $("#img-list").append(
+                                ` <a href="/image/${post._id}" class="col-xs-4"><div><h1>${post.title}</h1><img width="100%" height="300" src="${post.url}"/></div></a>`
+                            )
+                        })
+                    }
+                })
+        }
+
         function All() {
             $("#follow-button").removeClass().addClass("btn btn-default");
             $("#friend-button").removeClass().addClass("btn btn-default");
+            $("#bought-button").removeClass().addClass("btn btn-default");
+            $("#your-button").removeClass().addClass("btn btn-default");
             $("#all").removeClass().addClass("btn btn-success");
             LoadPost();
 
         }
+
         function LoadFriend() {
             $("#follow-button").removeClass().addClass("btn btn-default");
             $("#all").removeClass().addClass("btn btn-default");
             $("#friend-button").removeClass().addClass("btn btn-success");
+            $("#your-button").removeClass().addClass("btn btn-default");
+            $("#bought-button").removeClass().addClass("btn btn-default");
             axios
-                .get('{{url}}/post/friend', { withCredentials: true })
+                .post('{{url3}}/post/findFriendPost', {}, {
+                    withCredentials: true
+                })
                 .then(function (res) {
+                    return axios
+                        .post('{{url}}/post/getPosts', {
+                            id: res.data.id
+                        }, {
+                            withCredentials: true
+                        })
+
+
+                }).then(function (res) {
                     $("#img-list").empty();
                     if (res.data.success) {
                         res.data.posts.map(function (post) {
-                            $("#img-list").append(` <a href="/image/${post._id}" class="col-xs-4"><div><h1>${post.title}</h1><img width="100%" height="300" src="${post.url}"/></div></a>`)
+                            $("#img-list").append(
+                                ` <a href="/image/${post._id}" class="col-xs-4"><div><h1>${post.title}</h1><img width="100%" height="300" src="${post.url}"/></div></a>`
+                            )
                         })
-
                     }
                 })
         }
+
         function LoadFollow() {
             $("#friend-button").removeClass().addClass("btn btn-default");
             $("#all").removeClass().addClass("btn btn-default");
+            $("#your-button").removeClass().addClass("btn btn-default");
             $("#follow-button").removeClass().addClass("btn btn-success");
+            $("#bought-button").removeClass().addClass("btn btn-default");
             axios
-                .get('{{url}}/post/follow', { withCredentials: true })
+                .post('{{url3}}/post/findFollowPost', {}, {
+                    withCredentials: true
+                })
                 .then(function (res) {
+                    return axios
+                        .post('{{url}}/post/getPosts', {
+                            id: res.data.id
+                        }, {
+                            withCredentials: true
+                        })
+
+
+                }).then(function (res) {
                     $("#img-list").empty();
                     if (res.data.success) {
                         res.data.posts.map(function (post) {
-                            $("#img-list").append(` <a href="/image/${post._id}" class="col-xs-4"><div><h1>${post.title}</h1><img width="100%" height="300" src="${post.url}"/></div></a>`)
+                            $("#img-list").append(
+                                ` <a href="/image/${post._id}" class="col-xs-4"><div><h1>${post.title}</h1><img width="100%" height="300" src="${post.url}"/></div></a>`
+                            )
                         })
-
                     }
                 })
         }
+
+        function LoadYour() {
+            $("#friend-button").removeClass().addClass("btn btn-default");
+            $("#all").removeClass().addClass("btn btn-default");
+            $("#your-button").removeClass().addClass("btn btn-success");
+            $("#follow-button").removeClass().addClass("btn btn-default");
+            $("#bought-button").removeClass().addClass("btn btn-default");
+            axios
+                .post('{{url3}}/post/findYourPost', {}, {
+                    withCredentials: true
+                })
+                .then(function (res) {
+                    return axios
+                        .post('{{url}}/post/getPosts', {
+                            id: res.data.id
+                        }, {
+                            withCredentials: true
+                        })
+
+
+                }).then(function (res) {
+                    $("#img-list").empty();
+                    if (res.data.success) {
+                        res.data.posts.map(function (post) {
+                            $("#img-list").append(
+                                ` <a href="/image/${post._id}" class="col-xs-4"><div><h1>${post.title}</h1><img width="100%" height="300" src="${post.url}"/></div></a>`
+                            )
+                        })
+                    }
+                })
+        }
+
         function LoadPost() {
             $('#inputTitle').val("");
             $('#inputDescription').val("");
+            $('#inputPrice').val("");
             $('#inputPicture').val("");
             axios
-                .get('{{url}}/post?id={{session._id}}', { withCredentials: true })
+                .get('{{url}}/post?id={{session._id}}', {
+                    withCredentials: true
+                })
                 .then(function (res) {
                     $("#img-list").empty();
                     if (res.data.success) {
                         res.data.posts.map(function (post) {
-                            $("#img-list").append(` <a href="/image/${post._id}" class="col-xs-4"><div><h1>${post.title}</h1><img width="100%" height="300" src="${post.url}"/></div></a>`)
+                            $("#img-list").append(
+                                ` <a href="/image/${post._id}" class="col-xs-4"><div><h1>${post.title}</h1><img width="100%" height="300" src="${post.url}"/></div></a>`
+                            )
                         })
-                    }
-                    else {
+                    } else {
                         console.log(res.data)
                     }
                 })
@@ -109,6 +220,7 @@
         window.onload = function () {
             LoadPost()
         }
+
         function upload() {
             $("#error-messages").empty();
             var formData = new FormData();
@@ -123,13 +235,14 @@
                     var formData = new FormData();
                     formData.append("title", $('#inputTitle').val());
                     formData.append("description", $('#inputDescription').val());
+                    formData.append("price", $('#inputPrice').val());
                     formData.append("url", "{{url2}}" + res.data.url);
                     axios.post("{{url}}/post", formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        },
-                        withCredentials: true
-                    })
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            },
+                            withCredentials: true
+                        })
                         .then(function (res) {
                             if (res.data.success) {
                                 LoadPost();
@@ -137,7 +250,8 @@
                             }
                             $("#error-messages").empty();
 
-                            $("#error-messages").append(`<div id='${index}' class="error-message">${res.data.message}</div>`)
+                            $("#error-messages").append(
+                                `<div id='${index}' class="error-message">${res.data.message}</div>`)
 
                         });
                 } else {
