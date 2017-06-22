@@ -39,9 +39,9 @@ Sau khi thực hiện xong giai đoạn 1, sinh viên sẽ được cung cấp m
 ### Xử lý lỗi
 * [x] Xử lý lỗi trong cùng trang web (MSSV1)
 * [ ] Xử lý lỗi dùng trang web riêng (MSSV1)
-   * [ ] 401 (MSSV1)
-   * [ ] 404 (MSSV1)
-   * [ ] 500 (MSSV1)
+   * [x] 401 (MSSV1)
+   * [x] 404 (MSSV1)
+   * [x] 500 (MSSV1)
 
 ### Tương tác API khác
 Liệt kê các API nhóm đã sử dụng được ở đây
@@ -81,16 +81,21 @@ Các **yêu cầu chức năng** (check và ghi MSSV vào các phần chức nă
 * [x] Lưu quan hệ bạn bè bằng Neo4j
 * [x] Cho phép người dùng upload ảnh và lưu ảnh vào mongodb đồng thời lưu quan hệ tạo neo4j
 * [x] Cho phép người dùng follow người dùng up ảnh lưu quan hệ trong ne4oj
-* [x] Cho phép người dùng tìm những bài theo người họ follow hoặc kết bạn
-
+* [x] Cho phép người dùng tìm những hình theo người họ follow hoặc kết bạn
+* [x] Cho phép người dùng tìm những hình mà họ đã úp
+* [x] Cho phép người dùng mua những tấm ảnh họ muốn
+* [x] Cho phép người dùng xem những tấm ảnh họ đã mua
+* [x] Cho phép người dùng xem thông tin những tấm hình họ đã upload đã được mua
+* [x] Cho phép admin xem truy cập của web đã được lưu trong csdl Cassandra (admin@gmail.com / 123456)
 
 
 ## Demo
 
 Link ảnh GIF demo ứng dụng:
-
-![Video Walkthrough](demo.gif)
-
+## login
+![Video Walkthrough](./demo/login.png)
+##friend  
+![Video Walkthrough](./demo/friend.png)
 Tạo ảnh GIF với chương trình [LiceCap](http://www.cockos.com/licecap/).
 
 

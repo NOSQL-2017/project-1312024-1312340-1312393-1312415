@@ -25,7 +25,7 @@ function connection() {
       connection();
       return;
     }
-
+    console.log("system api is on");
     var MyModel = models.loadSchema(
       "Data",
       {

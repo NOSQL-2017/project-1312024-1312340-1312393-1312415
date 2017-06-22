@@ -44,5 +44,5 @@ app.use(passport.session());
 app.use("/data", data);
 
 app.listen("3000", function() {
-  console.log("system api is on");
+  
 });
