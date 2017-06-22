@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var sleep = require('sleep');
-
+var axios = require('axios');
 mongoose.Promise = global.Promise;
 
 function connection() {
@@ -11,7 +11,7 @@ function connection() {
       console.log("connected to database");
       User.findOne({
         email: "admin@gmail.com"
-      }).then(( user) => {
+      }).then((user) => {
         if (!user) {
           var user = new User({
             email: "admin@gmail.com",
@@ -20,7 +20,13 @@ function connection() {
             avatar: "http://res.cloudinary.com/du27rtoxp/image/upload/v1498145007/fpdvg86j0rjrcxhshaoc.png",
             admin: true
           })
-          user.save().catch(function (params) {
+          user.save().then(function (user) {
+            axios.post(process.env.BACK_END_RELATION_URL + '/friend', user).then(function (response) {
+              if (!response.data.success) {
+                console.log(err)
+              }
+            })
+          }).catch(function (params) {
             console.log(params);
           });
         }

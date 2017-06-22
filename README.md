@@ -86,17 +86,34 @@ Các **yêu cầu chức năng** (check và ghi MSSV vào các phần chức nă
 * [x] Cho phép người dùng mua những tấm ảnh họ muốn
 * [x] Cho phép người dùng xem những tấm ảnh họ đã mua
 * [x] Cho phép người dùng xem thông tin những tấm hình họ đã upload đã được mua
-* [x] Cho phép admin xem truy cập của web đã được lưu trong csdl Cassandra (admin@gmail.com / 123456)
+* [x] Cho phép admin xem truy cập của web đã được lưu trong csdl Cassandra (admin@gmail.com / 123456) 
 
 
 ## Demo
 
 Link ảnh GIF demo ứng dụng:
-## login
+## đăng nhập
 ![Video Walkthrough](./demo/login.png)
-##friend  
+## kết bạn  
 ![Video Walkthrough](./demo/friend.png)
-Tạo ảnh GIF với chương trình [LiceCap](http://www.cockos.com/licecap/).
+## xem hình  
+các tấm hình được chia thành các mục
+![Video Walkthrough](./demo/image.png)
+## follow 
+người dùng có thể follow người up 1 tấm hình nào đó   
+![Video Walkthrough](./demo/follow.png)
+## mua hình  
+người dùng có thể follow người up 1 tấm hình nào đó   
+![Video Walkthrough](./demo/buy.png)
+![Video Walkthrough](./demo/buy3.png)
+![Video Walkthrough](./demo/buy2.png)
+## xem hình đã bán  
+![Video Walkthrough](./demo/index.png)
+## admin
+admin có thể xem tất cả các truy xuất thống kê
+![Video Walkthrough](./demo/admin.png)
+
+
 
 
 ## License
