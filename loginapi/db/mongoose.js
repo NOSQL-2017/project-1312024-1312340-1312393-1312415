@@ -21,11 +21,11 @@ function connection() {
             admin: true
           })
           user.save().then(function (user) {
-            axios.post(process.env.BACK_END_RELATION_URL + '/friend', user).then(function (response) {
-              if (!response.data.success) {
-                console.log(err)
-              }
-            })
+            return axios.post(process.env.BACK_END_RELATION_URL + '/friend', user)
+          }).then(function (response) {
+            if (!response.data.success) {
+              console.log(err)
+            }
           }).catch(function (params) {
             console.log(params);
           });

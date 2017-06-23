@@ -74,6 +74,7 @@ Liệt kê các API nhóm đã sử dụng được ở đây
 
 ## Chức năng đã thực hiện
 Các **yêu cầu chức năng** (check và ghi MSSV vào các phần chức năng đã thực hiện)
+* [x] Thực hiện cho các server chờ khi csdl chưa chạy
 * [x] Thực hiện chúc thực bằng email và facebook
 * [x] Lưu người dùng MongoDb
 * [x] Lưu session trong redis
