@@ -15,7 +15,7 @@ Trong đề tài, sinh viên cần mô tả các chức năng có thể thực h
 Yêu cầu **GIT**
 * [x] Có sử dụng GIT.
 * [x] Sử dụng GIT theo Centralized Workflow.
-* [ ] Sử dụng GIT theo Feature Branch Workflow.
+* [x] Sử dụng GIT theo Feature Branch Workflow.
 * [ ] Sử dụng GIT theo Gitflow Workflow.
 
 ## Mô tả chung ứng dụng
